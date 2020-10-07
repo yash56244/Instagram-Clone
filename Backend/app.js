@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const MONGOURI = "mongodb+srv://Yash:ui2Soj2wR3hJOOqe@cluster0.ijyx1.mongodb.net/test?retryWrites=true&w=majority";
 const PORT = 5000;
 
+require('./models/user');
+
 mongoose.connect(MONGOURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
