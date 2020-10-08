@@ -8,3 +8,38 @@ a {
 h2 {
     font-family: "Grand Hotel", cursive;
 }
+
+.profile-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 18px 0px;
+    border-bottom: 2px solid gray;
+}
+
+.profile-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+}
+
+.profile-info {
+    display: flex;
+    justify-content: space-between;
+    width: 110%;
+}
+
+.profile-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.profile-gallery-img {
+    width: 33%;
+    padding-top: 5px;
+}
+
+.profile-page{
+  max-width: 800px;
+  margin: 0px auto;
+}
