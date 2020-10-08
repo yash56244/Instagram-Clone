@@ -66,6 +66,13 @@ a {
 
 .auth-card {
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 500px;
     text-align: center;
+    padding: 10px 10px;
+}
+
+#toast-container {
+    top: 40px;
+    right: 20px;
+    left: auto;
 }
