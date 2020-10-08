@@ -4,6 +4,28 @@ const router = express.Router();
 const Post = mongoose.model("Post");
 const loginRequired = require("../middleware/loginRequired");
 
+router.get("/posts/all", (req, res) => {
+    Post.find()
+        .populate("author")
+        .then((posts) => {
+            res.json({ posts });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+router.get("/posts/me", loginRequired, (req, res) => {
+    Post.find({ author: req.user._id })
+        .populate("author")
+        .then((posts) => {
+            res.json({ posts });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
 router.post("/post/create", loginRequired, (req, res) => {
     const { caption } = req.body;
     if (!caption) {
