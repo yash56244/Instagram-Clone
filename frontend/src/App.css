@@ -5,7 +5,7 @@ a {
 }
 
 .brand-logo,
-h2 {
+.insta-font {
     font-family: "Grand Hotel", cursive;
 }
 
@@ -55,4 +55,17 @@ h2 {
     height: 50px;
     border-radius: 50%;
     margin-bottom: -15px;
+}
+
+.newPost-card {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+    padding: 20px 30px;
+}
+
+.auth-card {
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
 }

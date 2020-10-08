@@ -5,6 +5,7 @@ import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
+import NewPost from "./components/pages/NewPost";
 import "./App.css";
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
             </Route>
             <Route path="/profile" exact>
                 <Profile />
+            </Route>
+            <Route path="/post/create">
+                <NewPost />
             </Route>
         </BrowserRouter>
     );
