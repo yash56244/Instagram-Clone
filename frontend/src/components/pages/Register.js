@@ -35,6 +35,9 @@ const Register = () => {
                     M.toast({ html: data.message, classes: "green" });
                     history.push("/login");
                 }
+            })
+            .catch((error) => {
+                console.log(error);
             });
     };
     return (

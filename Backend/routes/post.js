@@ -10,8 +10,8 @@ router.get("/posts/all", (req, res) => {
         .then((posts) => {
             res.json({ posts });
         })
-        .catch((err) => {
-            console.log(err);
+        .catch((error) => {
+            console.log(error);
         });
 });
 
@@ -21,8 +21,8 @@ router.get("/posts/me", loginRequired, (req, res) => {
         .then((posts) => {
             res.json({ posts });
         })
-        .catch((err) => {
-            console.log(err);
+        .catch((error) => {
+            console.log(error);
         });
 });
 
@@ -39,8 +39,8 @@ router.post("/post/create", loginRequired, (req, res) => {
         .then((result) => {
             res.json(result);
         })
-        .catch((err) => {
-            console.log(err);
+        .catch((error) => {
+            console.log(error);
         });
 });
 

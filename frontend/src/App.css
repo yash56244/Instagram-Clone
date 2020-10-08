@@ -55,6 +55,8 @@ a {
     height: 50px;
     border-radius: 50%;
     margin-bottom: -15px;
+    margin-left: 5px;
+    margin-top: 4px;
 }
 
 .newPost-card {
