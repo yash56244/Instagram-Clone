@@ -7,6 +7,7 @@ import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
 import NewPost from "./components/pages/NewPost";
 import { initialUserState, userReducer } from "./reducers/userReducer";
+import M from "materialize-css";
 import "./App.css";
 
 export const UserContext = createContext();
@@ -21,6 +22,7 @@ const Router = () => {
             dispatch({ type: "USER", payload: user });
             history.push("/");
         } else {
+            M.toast({ html: "You need to login to continue.." });
             history.push("/login");
         }
     };

@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../App";
+import M from "materialize-css";
 
 const Navbar = () => {
+    const history = useHistory();
     const { state, dispatch } = useContext(UserContext);
     const renderList = () => {
         if (state) {
@@ -12,6 +14,18 @@ const Navbar = () => {
                 </li>,
                 <li>
                     <Link to="/post/create">New Post</Link>
+                </li>,
+                <li>
+                    <button
+                        className="btn waves-effect waves-light red"
+                        onClick={() => {
+                            localStorage.clear();
+                            dispatch({ type: "CLEAR" });
+                            history.push("/login");
+                        }}
+                    >
+                        Log-Out
+                    </button>
                 </li>,
             ];
         } else {
