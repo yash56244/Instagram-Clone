@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
+import { UserContext } from "../../App";
 
 const Login = () => {
+    // eslint-disable-next-line no-unused-vars
+    const [state, dispatch] = useContext(UserContext);
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,7 +34,9 @@ const Login = () => {
                     M.toast({ html: data.error, classes: "red" });
                 } else {
                     localStorage.setItem("jwt", data.token);
+                    data.user.password = null;
                     localStorage.setItem("user", JSON.stringify(data.user));
+                    dispatch({ type: "USER", payload: data.user });
                     M.toast({
                         html: "Successfully Logged IN",
                         classes: "green",
