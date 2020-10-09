@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import M from "materialize-css";
 import { useHistory } from "react-router-dom";
 
@@ -7,7 +7,41 @@ const NewPost = () => {
     const [caption, setCaption] = useState("");
     const [image, setImage] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+    const fetchPost = () => {
+        if (imageUrl) {
+            fetch("/post/create", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+                body: JSON.stringify({
+                    caption,
+                    imageUrl,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        M.toast({ html: data.error, classes: "red" });
+                    } else {
+                        M.toast({
+                            html: "Posted Successfully",
+                            classes: "green",
+                        });
+                        history.push("/");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
+    useEffect(fetchPost, [imageUrl]);
     const postDetails = () => {
+        if (!image) {
+            return M.toast({ html: "Please add all fields", classes: "red" });
+        }
         const data = new FormData();
         data.append("file", image);
         data.append("upload_preset", "insta-clone");
@@ -18,35 +52,10 @@ const NewPost = () => {
         })
             .then((res) => res.json())
             .then((res) => {
-                setImageUrl(data.url);
+                setImageUrl(res.url);
             })
             .catch((err) => {
                 console.log(err);
-            });
-        fetch("/post/create", {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                caption,
-                imageUrl,
-            }),
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.error) {
-                    M.toast({ html: data.error, classes: "red" });
-                } else {
-                    M.toast({
-                        html: "Posted Successfully",
-                        classes: "green",
-                    });
-                    history.push("/");
-                }
-            })
-            .catch((error) => {
-                console.log(error);
             });
     };
     return (

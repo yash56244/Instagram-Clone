@@ -30,6 +30,8 @@ const Login = () => {
                 if (data.error) {
                     M.toast({ html: data.error, classes: "red" });
                 } else {
+                    localStorage.setItem("jwt", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
                     M.toast({
                         html: "Successfully Logged IN",
                         classes: "green",
@@ -55,7 +57,7 @@ const Login = () => {
                             setEmail(e.target.value);
                         }}
                     />
-                    <label for="email">Email</label>
+                    <label htmlFor="email">Email</label>
                 </div>
             </div>
             <div className="row">
@@ -69,7 +71,7 @@ const Login = () => {
                             setPassword(e.target.value);
                         }}
                     />
-                    <label for="password">Password</label>
+                    <label htmlFor="password">Password</label>
                 </div>
             </div>
             <button

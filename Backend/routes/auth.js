@@ -52,9 +52,8 @@ router.post("/login", (req, res) => {
             .compare(password, user.password)
             .then((match) => {
                 if (match) {
-                    //   res.json({ message: "Successfully Logged IN" });
                     const token = jwt.sign({ _id: user._id }, JWT_SECRET);
-                    res.send({ token });
+                    res.send({ token, user });
                 } else {
                     return res
                         .status(422)

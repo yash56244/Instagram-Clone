@@ -54,7 +54,7 @@ const Register = () => {
                             setName(e.target.value);
                         }}
                     />
-                    <label for="name">Name</label>
+                    <label htmlFor="name">Name</label>
                 </div>
             </div>
             <div className="row">
@@ -68,7 +68,7 @@ const Register = () => {
                             setEmail(e.target.value);
                         }}
                     />
-                    <label for="email">Email</label>
+                    <label htmlFor="email">Email</label>
                 </div>
             </div>
             <div className="row">
@@ -82,7 +82,7 @@ const Register = () => {
                             setPassword(e.target.value);
                         }}
                     />
-                    <label for="password">Password</label>
+                    <label htmlFor="password">Password</label>
                 </div>
             </div>
             <button
