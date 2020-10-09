@@ -4,7 +4,7 @@ const router = express.Router();
 const Post = mongoose.model("Post");
 const loginRequired = require("../middleware/loginRequired");
 
-router.get("/posts/all", (req, res) => {
+router.get("/posts/all", loginRequired, (req, res) => {
     Post.find()
         .populate("author")
         .then((posts) => {
