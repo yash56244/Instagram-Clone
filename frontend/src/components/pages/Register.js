@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
 
@@ -6,38 +6,67 @@ const Register = () => {
     const history = useHistory();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [image, setImage] = useState("");
+    const [imageUrl, setImageUrl] = useState("");
     const [password, setPassword] = useState("");
-    const postData = () => {
-        if (
-            !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
-                email
-            )
-        ) {
-            M.toast({ html: "Please enter a valid E-mail", classes: "red" });
-            return;
+    const fetchUser = () => {
+        if (imageUrl) {
+            if (
+                !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+                    email
+                )
+            ) {
+                M.toast({
+                    html: "Please enter a valid E-mail",
+                    classes: "red",
+                });
+                return;
+            }
+            fetch("/register", {
+                method: "post",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                    photoUrl: imageUrl,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        M.toast({ html: data.error, classes: "red" });
+                    } else {
+                        M.toast({ html: data.message, classes: "green" });
+                        history.push("/login");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
-        fetch("/register", {
+    };
+    useEffect(fetchUser, [imageUrl]);
+    const postData = () => {
+        if (!image) {
+            return M.toast({ html: "Please add all fields", classes: "red" });
+        }
+        const data = new FormData();
+        data.append("file", image);
+        data.append("upload_preset", "insta-clone");
+        data.append("cloud_name", "yvc");
+        fetch("https://api.cloudinary.com/v1_1/yvc/image/upload", {
             method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                password,
-            }),
+            body: data,
         })
             .then((res) => res.json())
-            .then((data) => {
-                if (data.error) {
-                    M.toast({ html: data.error, classes: "red" });
-                } else {
-                    M.toast({ html: data.message, classes: "green" });
-                    history.push("/login");
-                }
+            .then((res) => {
+                setImageUrl(res.url);
             })
-            .catch((error) => {
-                console.log(error);
+            .catch((err) => {
+                console.log(err);
             });
     };
     return (
@@ -69,6 +98,22 @@ const Register = () => {
                         }}
                     />
                     <label htmlFor="email">Email</label>
+                </div>
+            </div>
+            <div className="row">
+                <div className="file-field input-field">
+                    <div className="btn">
+                        <span>Profile Photo</span>
+                        <input
+                            type="file"
+                            onChange={(e) => {
+                                setImage(e.target.files[0]);
+                            }}
+                        />
+                    </div>
+                    <div className="file-path-wrapper">
+                        <input className="file-path validate" type="text" />
+                    </div>
                 </div>
             </div>
             <div className="row">

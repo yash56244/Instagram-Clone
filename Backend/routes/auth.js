@@ -8,8 +8,8 @@ const JWT_SECRET =
     "$2a$16$M8S4d1xj/p3won8BzNn6OOrV/H5p44v5s.fPIsr7X.iKYapnoRyLC";
 
 router.post("/register", (req, res) => {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
+    const { name, email, password, photoUrl } = req.body;
+    if (!name || !email || !password || !photoUrl) {
         return res.status(422).json({ error: "All fields are required" });
     }
     User.findOne({ email: email })
@@ -24,6 +24,7 @@ router.post("/register", (req, res) => {
                     email,
                     password: hashedPassword,
                     name,
+                    photo: photoUrl,
                 });
                 user.save()
                     .then((user) => {

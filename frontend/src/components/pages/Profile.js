@@ -3,6 +3,7 @@ import { UserContext } from "../../App";
 
 const Profile = () => {
     const [photos, setPhotos] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
     const fetchMyPosts = () => {
         fetch("/posts/me", {
@@ -22,7 +23,7 @@ const Profile = () => {
                 <div>
                     <img
                         className="profile-img"
-                        src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
+                        src={state ? state.photo : "Loading"}
                         alt=""
                     />
                 </div>
@@ -36,15 +37,29 @@ const Profile = () => {
                 </div>
             </div>
             <div className="profile-gallery">
-                {photos.map((item) => {
-                    return (
-                        <img
-                            className="profile-gallery-img"
-                            src={item.photo}
-                            alt=""
-                        />
-                    );
-                })}
+                {photos.length > 0 ? (
+                    photos.map((item) => {
+                        return (
+                            <img
+                                className="profile-gallery-img"
+                                src={item.photo}
+                                alt=""
+                            />
+                        );
+                    })
+                ) : (
+                    <h3
+                        style={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            fontFamily: "Grand Hotel",
+                        }}
+                    >
+                        No Posts....
+                    </h3>
+                )}
             </div>
         </div>
     );

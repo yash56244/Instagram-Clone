@@ -25,7 +25,7 @@ const Home = () => {
                         <div className="card home-card">
                             <h4>
                                 <img
-                                    src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
+                                    src={item.author.photo}
                                     className="home-profile-img"
                                     alt=""
                                 />

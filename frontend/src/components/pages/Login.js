@@ -5,7 +5,7 @@ import { UserContext } from "../../App";
 
 const Login = () => {
     // eslint-disable-next-line no-unused-vars
-    const {state, dispatch} = useContext(UserContext);
+    const { state, dispatch } = useContext(UserContext);
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
