@@ -20,7 +20,6 @@ const Router = () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (user) {
             dispatch({ type: "USER", payload: user });
-            history.push("/");
         } else {
             M.toast({ html: "You need to login to continue.." });
             history.push("/login");

@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../App";
-import M from "materialize-css";
 
 const Navbar = () => {
     const history = useHistory();
