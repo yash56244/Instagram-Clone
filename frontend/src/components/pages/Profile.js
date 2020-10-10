@@ -44,7 +44,7 @@ const Profile = () => {
                                 className="profile-gallery-img"
                                 src={item.photo}
                                 alt=""
-                            />
+                            ></img>
                         );
                     })
                 ) : (

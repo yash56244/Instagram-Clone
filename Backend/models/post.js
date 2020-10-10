@@ -16,6 +16,15 @@ const postSchema = new mongoose.Schema({
             ref: "User",
         },
     ],
+    comments: [
+        {
+            text: String,
+            author: {
+                type: ObjectId,
+                ref: "User",
+            },
+        },
+    ],
     author: {
         type: ObjectId,
         ref: "User",

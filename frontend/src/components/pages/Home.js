@@ -34,8 +34,6 @@ const Home = () => {
         })
             .then((res) => res.json())
             .then((result) => {
-                console.log(result, data);
-
                 const newData = data.map((item) => {
                     if (item._id === result._id) {
                         return result;
@@ -62,7 +60,6 @@ const Home = () => {
         })
             .then((res) => res.json())
             .then((result) => {
-                console.log(result, data);
                 const newData = data.map((item) => {
                     if (item._id === result._id) {
                         return result;
@@ -118,7 +115,7 @@ const Home = () => {
                                 ) : (
                                     <h6>{item.likes.length} like</h6>
                                 )}
-                                <h6>{item.caption}</h6>
+                                <h6>{item.author.name} : {item.caption}</h6>
                                 <input
                                     type="text"
                                     placeholder="Add a Comment.."

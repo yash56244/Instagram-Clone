@@ -54,14 +54,17 @@ router.put("/like", loginRequired, (req, res) => {
         {
             new: true,
         }
-    ).exec((err, result) => {
-        if (err) {
-            return res.status(422).json({ error: err });
-        } else {
-            res.json(result);
-        }
-    });
+    )
+        .populate("author")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err });
+            } else {
+                res.json(result);
+            }
+        });
 });
+
 router.put("/unlike", loginRequired, (req, res) => {
     Post.findByIdAndUpdate(
         req.body.postId,
@@ -71,13 +74,39 @@ router.put("/unlike", loginRequired, (req, res) => {
         {
             new: true,
         }
-    ).exec((err, result) => {
-        if (err) {
-            return res.status(422).json({ error: err });
-        } else {
-            res.json(result);
+    )
+        .populate("author", "_id name photo")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err });
+            } else {
+                res.json(result);
+            }
+        });
+});
+
+router.put("/comment", loginRequired, (req, res) => {
+    const comment = {
+        text: req.body.text,
+        author: req.user,
+    };
+    Post.findByIdAndUpdate(
+        req.body.postId,
+        {
+            $push: { comments: comment },
+        },
+        {
+            new: true,
         }
-    });
+    )
+        .populate("comments.author", "_id name")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err });
+            } else {
+                res.json(result);
+            }
+        });
 });
 
 module.exports = router;
