@@ -7,6 +7,7 @@ const loginRequired = require("../middleware/loginRequired");
 router.get("/posts/all", loginRequired, (req, res) => {
     Post.find()
         .populate("author")
+        .populate("comments.author", "_id name")
         .then((posts) => {
             res.json({ posts });
         })
@@ -18,6 +19,7 @@ router.get("/posts/all", loginRequired, (req, res) => {
 router.get("/posts/me", loginRequired, (req, res) => {
     Post.find({ author: req.user._id })
         .populate("author")
+        .populate("comments.author", "_id name")
         .then((posts) => {
             res.json({ posts });
         })
@@ -55,7 +57,8 @@ router.put("/like", loginRequired, (req, res) => {
             new: true,
         }
     )
-        .populate("author")
+        .populate("author", "_id name photo")
+        .populate("comments.author", "_id name")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err });
@@ -76,6 +79,7 @@ router.put("/unlike", loginRequired, (req, res) => {
         }
     )
         .populate("author", "_id name photo")
+        .populate("comments.author", "_id name")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err });
@@ -99,6 +103,7 @@ router.put("/comment", loginRequired, (req, res) => {
             new: true,
         }
     )
+        .populate("author", "_id name photo")
         .populate("comments.author", "_id name")
         .exec((err, result) => {
             if (err) {

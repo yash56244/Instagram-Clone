@@ -73,6 +73,33 @@ const Home = () => {
                 console.log(err);
             });
     };
+    const addComment = (id, text) => {
+        fetch("/comment", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+                text,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = data.map((item) => {
+                    if (item._id === result._id) {
+                        return result;
+                    } else {
+                        return item;
+                    }
+                });
+                setData(newData);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div>
             {data.length > 0 ? (
@@ -115,11 +142,29 @@ const Home = () => {
                                 ) : (
                                     <h6>{item.likes.length} like</h6>
                                 )}
-                                <h6>{item.author.name} : {item.caption}</h6>
-                                <input
-                                    type="text"
-                                    placeholder="Add a Comment.."
-                                />
+                                <h6>
+                                    <b>{item.author.name}</b> : {item.caption}
+                                </h6>
+                                {item.comments.map((item2) => {
+                                    return (
+                                        <h6>
+                                            <b>{item2.author.name}</b> :{" "}
+                                            {item2.text}
+                                        </h6>
+                                    );
+                                })}
+                                <form
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        addComment(item._id, e.target[0].value);
+                                        e.target[0].value = "";
+                                    }}
+                                >
+                                    <input
+                                        type="text"
+                                        placeholder="Add a Comment.."
+                                    />
+                                </form>
                             </div>
                         </div>
                     );
