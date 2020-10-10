@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../App";
 
 const Home = () => {
     const [data, setData] = useState([]);
+    // eslint-disable-next-line no-unused-vars
+    const { state, dispatch } = useContext(UserContext);
     const fetchPosts = () => {
         fetch("/posts/all", {
             headers: {
+                "Content-Type": "application/json",
                 authorization: "Bearer " + localStorage.getItem("jwt"),
             },
         })
@@ -17,6 +21,61 @@ const Home = () => {
             });
     };
     useEffect(fetchPosts, []);
+    const likePost = (id) => {
+        fetch("/like", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result, data);
+
+                const newData = data.map((item) => {
+                    if (item._id === result._id) {
+                        return result;
+                    } else {
+                        return item;
+                    }
+                });
+                setData(newData);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    const unlikePost = (id) => {
+        fetch("/unlike", {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId: id,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result, data);
+                const newData = data.map((item) => {
+                    if (item._id === result._id) {
+                        return result;
+                    } else {
+                        return item;
+                    }
+                });
+                setData(newData);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div>
             {data.length > 0 ? (
@@ -35,6 +94,30 @@ const Home = () => {
                                 <img src={item.photo} alt="" />
                             </div>
                             <div className="card-content">
+                                {item.likes.includes(state._id) ? (
+                                    <i
+                                        className="material-icons medium"
+                                        onClick={() => {
+                                            unlikePost(item._id);
+                                        }}
+                                    >
+                                        thumb_down
+                                    </i>
+                                ) : (
+                                    <i
+                                        className="material-icons medium"
+                                        onClick={() => {
+                                            likePost(item._id);
+                                        }}
+                                    >
+                                        thumb_up
+                                    </i>
+                                )}
+                                {item.likes.length > 1 ? (
+                                    <h6>{item.likes.length} likes</h6>
+                                ) : (
+                                    <h6>{item.likes.length} like</h6>
+                                )}
                                 <h6>{item.caption}</h6>
                                 <input
                                     type="text"
