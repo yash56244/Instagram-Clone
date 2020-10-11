@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
+import M from "materialize-css";
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -100,6 +101,23 @@ const Home = () => {
                 console.log(err);
             });
     };
+    const deletePost = (id) => {
+        fetch(`post/${id}/delete`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = data.filter((item) => {
+                    return item._id !== result._id;
+                });
+                setData(newData);
+                M.toast({ html: "Post deleted", classes: "green" });
+            });
+    };
     return (
         <div>
             {data.length > 0 ? (
@@ -113,6 +131,19 @@ const Home = () => {
                                     alt=""
                                 />
                                 {item.author.name}
+                                {item.author._id === state._id && (
+                                    <i
+                                        className="material-icons medium red-text"
+                                        onClick={() => {
+                                            deletePost(item._id);
+                                        }}
+                                        style={{
+                                            float: "right",
+                                        }}
+                                    >
+                                        delete
+                                    </i>
+                                )}
                             </h4>
                             <div className="card-image">
                                 <img src={item.photo} alt="" />

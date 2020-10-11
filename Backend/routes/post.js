@@ -114,4 +114,22 @@ router.put("/comment", loginRequired, (req, res) => {
         });
 });
 
+router.delete("/post/:id/delete", loginRequired, (req, res) => {
+    Post.findOne({ _id: req.params.id })
+        .populate("author", "_id")
+        .exec((err, post) => {
+            if (err || !post) {
+                return res.status(422).json({ error: err });
+            } else if (post.author._id.toString() === req.user._id.toString()) {
+                post.remove()
+                    .then((result) => {
+                        res.json(result);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        });
+});
+
 module.exports = router;
