@@ -139,6 +139,7 @@ const Home = () => {
                                         }}
                                         style={{
                                             float: "right",
+                                            cursor: "pointer",
                                         }}
                                     >
                                         delete
@@ -155,6 +156,9 @@ const Home = () => {
                                         onClick={() => {
                                             unlikePost(item._id);
                                         }}
+                                        style={{
+                                            cursor: "pointer",
+                                        }}
                                     >
                                         thumb_down
                                     </i>
@@ -163,6 +167,9 @@ const Home = () => {
                                         className="material-icons medium"
                                         onClick={() => {
                                             likePost(item._id);
+                                        }}
+                                        style={{
+                                            cursor: "pointer",
                                         }}
                                     >
                                         thumb_up
