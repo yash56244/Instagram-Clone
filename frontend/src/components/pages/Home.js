@@ -8,7 +8,7 @@ const Home = () => {
     // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
     const fetchPosts = () => {
-        fetch("/posts/all", {
+        fetch("/home", {
             headers: {
                 "Content-Type": "application/json",
                 authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -125,13 +125,17 @@ const Home = () => {
                 data.map((item) => {
                     return (
                         <div className="card home-card">
-                            <h4>
+                            <h4 style={{ maxHeight: "70px" }}>
                                 <img
                                     src={item.author.photo}
                                     className="home-profile-img"
                                     alt=""
                                 />
                                 <Link
+                                    style={{
+                                        position: "relative",
+                                        top: "-25px",
+                                    }}
                                     to={
                                         item.author._id !== state._id
                                             ? "/user/" + item.author._id
