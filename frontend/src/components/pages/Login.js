@@ -34,7 +34,6 @@ const Login = () => {
                     M.toast({ html: data.error, classes: "red" });
                 } else {
                     localStorage.setItem("jwt", data.token);
-                    data.user.password = null;
                     localStorage.setItem("user", JSON.stringify(data.user));
                     dispatch({ type: "USER", payload: data.user });
                     M.toast({

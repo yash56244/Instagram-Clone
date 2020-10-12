@@ -41,7 +41,8 @@ router.put("/follow", loginRequired, (req, res) => {
                 },
                 { new: true }
             )
-                .then((res) => res.json())
+                .select("-password")
+                .then((result) => res.json(result))
                 .catch((err) => {
                     return res.status(422).json({ error: err });
                 });
@@ -67,7 +68,8 @@ router.put("/unfollow", loginRequired, (req, res) => {
                 },
                 { new: true }
             )
-                .then((res) => res.json())
+                .select("-password")
+                .then((result) => res.json(result))
                 .catch((err) => {
                     return res.status(422).json({ error: err });
                 });

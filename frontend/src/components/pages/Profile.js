@@ -34,8 +34,8 @@ const Profile = () => {
                             {photos.length}
                             {photos.length > 1 ? " posts" : " post"}
                         </h6>
-                        <h6>40 following</h6>
-                        <h6>40 followers</h6>
+                        <h6>{state.followers.length} followers</h6>
+                        <h6>{state.following.length} following</h6>
                     </div>
                 </div>
             </div>
