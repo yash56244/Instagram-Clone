@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
 import M from "materialize-css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -130,7 +131,15 @@ const Home = () => {
                                     className="home-profile-img"
                                     alt=""
                                 />
-                                {item.author.name}
+                                <Link
+                                    to={
+                                        item.author._id !== state._id
+                                            ? "/user/" + item.author._id
+                                            : "/profile"
+                                    }
+                                >
+                                    {item.author.name}
+                                </Link>
                                 {item.author._id === state._id && (
                                     <i
                                         className="material-icons medium red-text"
@@ -208,17 +217,7 @@ const Home = () => {
                     );
                 })
             ) : (
-                <h3
-                    style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        fontFamily: "Grand Hotel",
-                    }}
-                >
-                    No Posts....
-                </h3>
+                <h3 id="loading">No Posts....</h3>
             )}
         </div>
     );

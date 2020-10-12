@@ -6,6 +6,7 @@ import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
 import NewPost from "./components/pages/NewPost";
+import User from "./components/pages/User";
 import { initialUserState, userReducer } from "./reducers/userReducer";
 import M from "materialize-css";
 import "./App.css";
@@ -42,6 +43,9 @@ const Router = () => {
             </Route>
             <Route path="/post/create">
                 <NewPost />
+            </Route>
+            <Route path="/user/:id">
+                <User />
             </Route>
         </Switch>
     );

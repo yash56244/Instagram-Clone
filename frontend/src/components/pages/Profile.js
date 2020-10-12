@@ -30,7 +30,10 @@ const Profile = () => {
                 <div>
                     <h4>{state ? state.name : "Loading"}</h4>
                     <div className="profile-info">
-                        <h6>40 posts</h6>
+                        <h6>
+                            {photos.length}
+                            {photos.length > 1 ? " posts" : " post"}
+                        </h6>
                         <h6>40 following</h6>
                         <h6>40 followers</h6>
                     </div>
@@ -48,17 +51,7 @@ const Profile = () => {
                         );
                     })
                 ) : (
-                    <h3
-                        style={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            fontFamily: "Grand Hotel",
-                        }}
-                    >
-                        No Posts....
-                    </h3>
+                    <h3 id="loading">No Posts....</h3>
                 )}
             </div>
         </div>
