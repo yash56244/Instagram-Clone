@@ -76,6 +76,9 @@ const Home = () => {
             });
     };
     const addComment = (id, text) => {
+        if (!text) {
+            return M.toast({ html: "Enter valid text", classes: "red" });
+        }
         fetch("/comment", {
             method: "put",
             headers: {
@@ -103,7 +106,7 @@ const Home = () => {
             });
     };
     const deletePost = (id) => {
-        fetch(`post/${id}/delete`, {
+        fetch(`/post/${id}/delete`, {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
@@ -119,12 +122,35 @@ const Home = () => {
                 M.toast({ html: "Post deleted", classes: "green" });
             });
     };
+    const deleteComment = (id, postId) => {
+        fetch(`/comment/${id}/delete`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({
+                postId,
+            }),
+        })
+            .then((res) => res.json())
+            .then((result) => {
+                const newData = data.map((item) => {
+                    if (item._id === result._id) {
+                        return result;
+                    } else {
+                        return item;
+                    }
+                });
+                setData(newData);
+            });
+    };
     return (
         <div>
             {data.length > 0 ? (
                 data.map((item) => {
                     return (
-                        <div className="card home-card">
+                        <div className="card home-card" key={item._id}>
                             <h4 style={{ maxHeight: "70px" }}>
                                 <img
                                     src={item.author.photo}
@@ -160,7 +186,11 @@ const Home = () => {
                                 )}
                             </h4>
                             <div className="card-image">
-                                <img src={item.photo} alt="" />
+                                <img
+                                    src={item.photo}
+                                    alt=""
+                                    onDoubleClick={() => likePost(item._id)}
+                                />
                             </div>
                             <div className="card-content">
                                 {item.likes.includes(state._id) ? (
@@ -198,9 +228,28 @@ const Home = () => {
                                 </h6>
                                 {item.comments.map((item2) => {
                                     return (
-                                        <h6>
+                                        <h6 key={item2._id}>
                                             <b>{item2.author.name}</b> :{" "}
                                             {item2.text}
+                                            {item2.author._id === state._id && (
+                                                <i
+                                                    className="material-icons"
+                                                    style={{
+                                                        float: "right",
+                                                        position: "relative",
+                                                        top: "-4px",
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={() => {
+                                                        deleteComment(
+                                                            item2._id,
+                                                            item._id
+                                                        );
+                                                    }}
+                                                >
+                                                    delete
+                                                </i>
+                                            )}
                                         </h6>
                                     );
                                 })}

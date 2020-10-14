@@ -6,8 +6,8 @@ const loginRequired = require("../middleware/loginRequired");
 
 router.get("/home", loginRequired, (req, res) => {
     Post.find({ author: { $in: req.user.following } })
-        .populate("author")
-        .populate("comments.author", "_id name")
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
         .then((posts) => {
             res.json({ posts });
         })
@@ -18,8 +18,8 @@ router.get("/home", loginRequired, (req, res) => {
 
 router.get("/posts/me", loginRequired, (req, res) => {
     Post.find({ author: req.user._id })
-        .populate("author")
-        .populate("comments.author", "_id name")
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
         .then((posts) => {
             res.json({ posts });
         })
@@ -57,8 +57,8 @@ router.put("/like", loginRequired, (req, res) => {
             new: true,
         }
     )
-        .populate("author", "_id name photo")
-        .populate("comments.author", "_id name")
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err });
@@ -78,8 +78,8 @@ router.put("/unlike", loginRequired, (req, res) => {
             new: true,
         }
     )
-        .populate("author", "_id name photo")
-        .populate("comments.author", "_id name")
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err });
@@ -103,8 +103,28 @@ router.put("/comment", loginRequired, (req, res) => {
             new: true,
         }
     )
-        .populate("author", "_id name photo")
-        .populate("comments.author", "_id name")
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
+        .exec((err, result) => {
+            if (err) {
+                return res.status(422).json({ error: err });
+            } else {
+                res.json(result);
+            }
+        });
+});
+
+router.delete("/comment/:id/delete", loginRequired, (req, res) => {
+    const comment = {
+        _id: req.params.id,
+    };
+    Post.findByIdAndUpdate(
+        req.body.postId,
+        { $pull: { comments: comment } },
+        { new: true }
+    )
+        .populate("author", "-password")
+        .populate("comments.author", "-password")
         .exec((err, result) => {
             if (err) {
                 return res.status(422).json({ error: err });

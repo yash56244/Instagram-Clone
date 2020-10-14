@@ -28,7 +28,12 @@ const Profile = () => {
                     />
                 </div>
                 <div>
-                    <h4>{state ? state.name : "Loading"}</h4>
+                    <h4>
+                        {state ? state.name : "Loading"}
+                        <button className="btn waves-effect waves-light">
+                            <i class="material-icons">create</i>
+                        </button>
+                    </h4>
                     <div className="profile-info">
                         <h6>
                             {photos.length}
