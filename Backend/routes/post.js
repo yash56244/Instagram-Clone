@@ -8,6 +8,7 @@ router.get("/home", loginRequired, (req, res) => {
     Post.find({ author: { $in: req.user.following } })
         .populate("author", "-password")
         .populate("comments.author", "-password")
+        .sort("-createdAt")
         .then((posts) => {
             res.json({ posts });
         })
@@ -20,6 +21,7 @@ router.get("/posts/me", loginRequired, (req, res) => {
     Post.find({ author: req.user._id })
         .populate("author", "-password")
         .populate("comments.author", "-password")
+        .sort("-createdAt")
         .then((posts) => {
             res.json({ posts });
         })
@@ -44,6 +46,24 @@ router.post("/post/create", loginRequired, (req, res) => {
         })
         .catch((error) => {
             console.log(error);
+        });
+});
+
+router.delete("/post/:id/delete", loginRequired, (req, res) => {
+    Post.findOne({ _id: req.params.id })
+        .populate("author", "_id")
+        .exec((err, post) => {
+            if (err || !post) {
+                return res.status(422).json({ error: err });
+            } else if (post.author._id.toString() === req.user._id.toString()) {
+                post.remove()
+                    .then((result) => {
+                        res.json(result);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
         });
 });
 
@@ -130,24 +150,6 @@ router.delete("/comment/:id/delete", loginRequired, (req, res) => {
                 return res.status(422).json({ error: err });
             } else {
                 res.json(result);
-            }
-        });
-});
-
-router.delete("/post/:id/delete", loginRequired, (req, res) => {
-    Post.findOne({ _id: req.params.id })
-        .populate("author", "_id")
-        .exec((err, post) => {
-            if (err || !post) {
-                return res.status(422).json({ error: err });
-            } else if (post.author._id.toString() === req.user._id.toString()) {
-                post.remove()
-                    .then((result) => {
-                        res.json(result);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
             }
         });
 });

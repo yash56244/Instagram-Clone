@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../../App";
+import { ProgressBar, Col, Row } from "react-materialize";
 
 const User = () => {
     const [userProfile, setUserProfile] = useState(null);
-    // eslint-disable-next-line no-unused-vars
+    const [loading, setLoading] = useState(true);
     const { state, dispatch } = useContext(UserContext);
     const { id } = useParams();
     const fetchProfile = () => {
@@ -15,6 +17,7 @@ const User = () => {
         })
             .then((res) => res.json())
             .then((res) => {
+                setLoading(false);
                 setUserProfile(res);
             });
     };
@@ -159,7 +162,11 @@ const User = () => {
                     </div>
                 </div>
             ) : (
-                <h4>Loading</h4>
+                <Row>
+                    <Col s={12}>
+                        <ProgressBar />
+                    </Col>
+                </Row>
             )}
         </>
     );

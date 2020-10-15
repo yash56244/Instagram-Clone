@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
 import M from "materialize-css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Row, Col, ProgressBar } from "react-materialize";
 
-const Home = () => {
+const Post = () => {
+    const history = useHistory();
     const [data, setData] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
-    const fetchPosts = () => {
-        fetch("/home", {
+    const fetchPost = () => {
+        fetch("/posts/me", {
             headers: {
                 "Content-Type": "application/json",
                 authorization: "Bearer " + localStorage.getItem("jwt"),
@@ -23,7 +24,7 @@ const Home = () => {
                 console.log(err);
             });
     };
-    useEffect(fetchPosts, []);
+    useEffect(fetchPost, []);
     const likePost = (id) => {
         fetch("/like", {
             method: "put",
@@ -121,6 +122,7 @@ const Home = () => {
                 });
                 setData(newData);
                 M.toast({ html: "Post deleted", classes: "green" });
+                history.push("/profile");
             });
     };
     const deleteComment = (id, postId) => {
@@ -180,6 +182,8 @@ const Home = () => {
                                         style={{
                                             float: "right",
                                             cursor: "pointer",
+                                            top: "12px",
+                                            position: "relative",
                                         }}
                                     >
                                         delete
@@ -281,4 +285,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Post;

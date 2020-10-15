@@ -2,6 +2,7 @@ import React, { useEffect, createContext, useReducer, useContext } from "react";
 import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./components/pages/Home";
+import Posts from "./components/pages/Posts";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
@@ -46,6 +47,9 @@ const Router = () => {
             </Route>
             <Route path="/user/:id">
                 <User />
+            </Route>
+            <Route exact path="/posts/me">
+                <Posts />
             </Route>
         </Switch>
     );

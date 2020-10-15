@@ -25,7 +25,6 @@ a {
 .profile-info {
     display: flex;
     justify-content: space-between;
-    width: 110%;
 }
 
 .profile-gallery {
@@ -85,6 +84,13 @@ a {
     font-family: "Grand Hotel";
 }
 
-::placeholder{
-  color: black;
+::placeholder {
+    color: black;
+}
+
+@media (max-width: 500px) {
+    .profile-img {
+        width: 80px;
+        height: 80px;
+    }
 }

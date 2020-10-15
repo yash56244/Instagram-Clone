@@ -67,7 +67,7 @@ const NewPost = () => {
         <div className="card input-field newPost-card">
             <h3 className="insta-font">New Post</h3>
             <div className="file-field input-field">
-                <div className="btn">
+                <div className="btn black">
                     <span>Photo</span>
                     <input
                         type="file"
@@ -97,7 +97,7 @@ const NewPost = () => {
                         size="small"
                     />
                 ) : (
-                    "Login"
+                    "Post"
                 )}
             </button>
         </div>
