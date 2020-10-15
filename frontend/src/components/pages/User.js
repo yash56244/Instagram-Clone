@@ -104,6 +104,11 @@ const User = () => {
                                     ? userProfile.user.name
                                     : "Loading"}
                             </h4>
+                            <p>
+                                {userProfile.user.bio
+                                    ? userProfile.user.bio
+                                    : ""}
+                            </p>
                             <div className="profile-info">
                                 <h6>
                                     {userProfile.posts.length}

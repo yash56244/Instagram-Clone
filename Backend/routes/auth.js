@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const loginRequired = require("../middleware/loginRequired");
 const router = express.Router();
 const User = mongoose.model("User");
 const JWT_SECRET =
@@ -67,8 +68,20 @@ router.post("/login", (req, res) => {
     });
 });
 
-router.put("/profile/edit", (req, res)=>{
-    const {name , email, bio, photoUrl} = req.body;
-})
+router.put("/profile/update", loginRequired, (req, res) => {
+    const { name, email, bio, photoUrl } = req.body;
+    User.findByIdAndUpdate(
+        req.user._id,
+        { name, email, bio, photo: photoUrl },
+        { new: true }
+    )
+        .select("-password")
+        .exec((err, user) => {
+            if (err) {
+                return res.status(422).json({ error: err });
+            }
+            res.json({ user, message: "Updated successfully" });
+        });
+});
 
 module.exports = router;

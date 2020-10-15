@@ -84,3 +84,7 @@ a {
     transform: translate(-50%, -50%);
     font-family: "Grand Hotel";
 }
+
+::placeholder{
+  color: black;
+}
