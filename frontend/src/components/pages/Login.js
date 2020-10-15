@@ -1,14 +1,16 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
+import { Preloader } from "react-materialize";
 import { UserContext } from "../../App";
 
 const Login = () => {
-    // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
     const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const postData = () => {
         if (
             !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
@@ -18,6 +20,7 @@ const Login = () => {
             M.toast({ html: "Please enter a valid E-mail", classes: "red" });
             return;
         }
+        setLoading(true);
         fetch("/login", {
             method: "post",
             headers: {
@@ -30,6 +33,7 @@ const Login = () => {
         })
             .then((res) => res.json())
             .then((data) => {
+                setLoading(false);
                 if (data.error) {
                     M.toast({ html: data.error, classes: "red" });
                 } else {
@@ -45,6 +49,7 @@ const Login = () => {
                 }
             })
             .catch((error) => {
+                setLoading(false);
                 console.log(error);
             });
     };
@@ -79,11 +84,17 @@ const Login = () => {
                     <label htmlFor="password">Password</label>
                 </div>
             </div>
-            <button
-                className="btn waves-effect waves-light"
-                onClick={() => postData()}
-            >
-                Login
+            <button className="btn black" onClick={() => postData()}>
+                {loading ? (
+                    <Preloader
+                        active={loading}
+                        color="blue"
+                        flashing
+                        size="small"
+                    />
+                ) : (
+                    "Login"
+                )}
             </button>
             <p>
                 Don't have an account? <Link to="/register">Sign up</Link>

@@ -160,7 +160,7 @@ const Home = () => {
                                 <Link
                                     style={{
                                         position: "relative",
-                                        top: "-25px",
+                                        top: "-30px",
                                     }}
                                     to={
                                         item.author._id !== state._id

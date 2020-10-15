@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import M from "materialize-css";
+import { Preloader } from "react-materialize";
 import { useHistory } from "react-router-dom";
 
 const NewPost = () => {
@@ -7,6 +8,7 @@ const NewPost = () => {
     const [caption, setCaption] = useState("");
     const [image, setImage] = useState("");
     const [imageUrl, setImageUrl] = useState("");
+    const [loading, setLoading] = useState(false);
     const fetchPost = () => {
         if (imageUrl) {
             fetch("/post/create", {
@@ -42,6 +44,7 @@ const NewPost = () => {
         if (!image) {
             return M.toast({ html: "Please add all fields", classes: "red" });
         }
+        setLoading(true);
         const data = new FormData();
         data.append("file", image);
         data.append("upload_preset", "insta-clone");
@@ -52,9 +55,11 @@ const NewPost = () => {
         })
             .then((res) => res.json())
             .then((res) => {
+                setLoading(false);
                 setImageUrl(res.url);
             })
             .catch((err) => {
+                setLoading(false);
                 console.log(err);
             });
     };
@@ -83,13 +88,17 @@ const NewPost = () => {
                     setCaption(e.target.value);
                 }}
             />
-            <button
-                className="btn waves-effect waves-light"
-                onClick={() => {
-                    postDetails();
-                }}
-            >
-                Post
+            <button className="btn black" onClick={() => postDetails()}>
+                {loading ? (
+                    <Preloader
+                        active={loading}
+                        color="blue"
+                        flashing
+                        size="small"
+                    />
+                ) : (
+                    "Login"
+                )}
             </button>
         </div>
     );

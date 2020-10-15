@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
+import { Preloader } from "react-materialize";
 
 const Register = () => {
     const history = useHistory();
@@ -9,6 +10,7 @@ const Register = () => {
     const [image, setImage] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const fetchUser = () => {
         if (imageUrl) {
             if (
@@ -22,6 +24,7 @@ const Register = () => {
                 });
                 return;
             }
+            setLoading(true);
             fetch("/register", {
                 method: "post",
                 headers: {
@@ -36,6 +39,7 @@ const Register = () => {
             })
                 .then((res) => res.json())
                 .then((data) => {
+                    setLoading(false);
                     if (data.error) {
                         M.toast({ html: data.error, classes: "red" });
                     } else {
@@ -44,6 +48,7 @@ const Register = () => {
                     }
                 })
                 .catch((error) => {
+                    setLoading(false);
                     console.log(error);
                 });
         }
@@ -130,11 +135,17 @@ const Register = () => {
                     <label htmlFor="password">Password</label>
                 </div>
             </div>
-            <button
-                className="btn waves-effect waves-light"
-                onClick={() => postData()}
-            >
-                Register
+            <button className="btn black" onClick={() => postData()}>
+                {loading ? (
+                    <Preloader
+                        active={loading}
+                        color="blue"
+                        flashing
+                        size="small"
+                    />
+                ) : (
+                    "Register"
+                )}
             </button>
             <p>
                 Have an account? <Link to="/login">Log In</Link>

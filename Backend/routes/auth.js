@@ -67,4 +67,8 @@ router.post("/login", (req, res) => {
     });
 });
 
+router.put("/profile/edit", (req, res)=>{
+    const {name , email, bio, photoUrl} = req.body;
+})
+
 module.exports = router;
