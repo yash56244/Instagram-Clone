@@ -107,7 +107,7 @@ const Register = () => {
             </div>
             <div className="row">
                 <div className="file-field input-field">
-                    <div className="btn">
+                    <div className="btn black">
                         <span>Profile Photo</span>
                         <input
                             type="file"
@@ -148,7 +148,10 @@ const Register = () => {
                 )}
             </button>
             <p>
-                Have an account? <Link to="/login">Log In</Link>
+                Have an account?{" "}
+                <Link to="/login">
+                    <b className="blue-text">Log In</b>
+                </Link>
             </p>
         </div>
     );

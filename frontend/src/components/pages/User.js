@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../../App";
 import { ProgressBar, Col, Row } from "react-materialize";
 
@@ -132,6 +132,9 @@ const User = () => {
                                 <button
                                     className="btn waves-effect waves-light"
                                     onClick={() => unfollowUser()}
+                                    style={{
+                                        margin: "10px",
+                                    }}
                                 >
                                     Unfollow
                                 </button>
@@ -139,10 +142,19 @@ const User = () => {
                                 <button
                                     className="btn waves-effect waves-light"
                                     onClick={() => followUser()}
+                                    style={{
+                                        margin: "10px",
+                                    }}
                                 >
                                     Follow
                                 </button>
                             )}
+                            <Link
+                                className="btn white-text black waves-effect waves-light"
+                                to={`/inbox/${userProfile.user._id}`}
+                            >
+                                Message
+                            </Link>
                         </div>
                     </div>
                     <div className="profile-gallery">

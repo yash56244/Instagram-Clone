@@ -8,6 +8,7 @@ import Register from "./components/pages/Register";
 import Profile from "./components/pages/Profile";
 import NewPost from "./components/pages/NewPost";
 import User from "./components/pages/User";
+import PrivateMessage from "./components/pages/PrivateMessage";
 import { initialUserState, userReducer } from "./reducers/userReducer";
 import M from "materialize-css";
 import "./App.css";
@@ -23,7 +24,10 @@ const Router = () => {
         if (user) {
             dispatch({ type: "USER", payload: user });
         } else {
-            M.toast({ html: "You need to login to continue.." });
+            M.toast({
+                html: "You need to login to continue..",
+                classes: "red",
+            });
             history.push("/login");
         }
     };
@@ -50,6 +54,9 @@ const Router = () => {
             </Route>
             <Route exact path="/posts/me">
                 <Posts />
+            </Route>
+            <Route exact path="/inbox/:id">
+                <PrivateMessage />
             </Route>
         </Switch>
     );

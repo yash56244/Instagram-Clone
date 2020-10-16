@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Modal, Button, Row, Col, ProgressBar } from "react-materialize";
 import { UserContext } from "../../App";
 import M from "materialize-css";

@@ -122,7 +122,6 @@ const Post = () => {
                 });
                 setData(newData);
                 M.toast({ html: "Post deleted", classes: "green" });
-                history.push("/profile");
             });
     };
     const deleteComment = (id, postId) => {

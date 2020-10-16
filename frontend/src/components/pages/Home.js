@@ -148,134 +148,156 @@ const Home = () => {
     };
     return (
         <div>
-            {data.length > 0 ? (
-                data.map((item) => {
-                    return (
-                        <div className="card home-card" key={item._id}>
-                            <h4 style={{ maxHeight: "70px" }}>
-                                <img
-                                    src={item.author.photo}
-                                    className="home-profile-img"
-                                    alt=""
-                                />
-                                <Link
-                                    style={{
-                                        position: "relative",
-                                        top: "-25px",
-                                    }}
-                                    to={
-                                        item.author._id !== state._id
-                                            ? "/user/" + item.author._id
-                                            : "/profile"
-                                    }
-                                >
-                                    {item.author.name}
-                                </Link>
-                                {item.author._id === state._id && (
-                                    <i
-                                        className="material-icons medium red-text"
-                                        onClick={() => {
-                                            deletePost(item._id);
-                                        }}
-                                        style={{
-                                            float: "right",
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        delete
-                                    </i>
-                                )}
-                            </h4>
-                            <div className="card-image">
-                                <img
-                                    src={item.photo}
-                                    alt=""
-                                    onDoubleClick={() => likePost(item._id)}
-                                />
-                            </div>
-                            <div className="card-content">
-                                {item.likes.includes(state._id) ? (
-                                    <i
-                                        className="material-icons medium"
-                                        onClick={() => {
-                                            unlikePost(item._id);
-                                        }}
-                                        style={{
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        thumb_down
-                                    </i>
-                                ) : (
-                                    <i
-                                        className="material-icons medium"
-                                        onClick={() => {
-                                            likePost(item._id);
-                                        }}
-                                        style={{
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        thumb_up
-                                    </i>
-                                )}
-                                {item.likes.length > 1 ? (
-                                    <h6>{item.likes.length} likes</h6>
-                                ) : (
-                                    <h6>{item.likes.length} like</h6>
-                                )}
-                                <h6>
-                                    <b>{item.author.name}</b> : {item.caption}
-                                </h6>
-                                {item.comments.map((item2) => {
-                                    return (
-                                        <h6 key={item2._id}>
-                                            <b>{item2.author.name}</b> :{" "}
-                                            {item2.text}
-                                            {item2.author._id === state._id && (
-                                                <i
-                                                    className="material-icons"
-                                                    style={{
-                                                        float: "right",
-                                                        position: "relative",
-                                                        top: "-4px",
-                                                        cursor: "pointer",
-                                                    }}
-                                                    onClick={() => {
-                                                        deleteComment(
-                                                            item2._id,
-                                                            item._id
-                                                        );
-                                                    }}
-                                                >
-                                                    delete
-                                                </i>
-                                            )}
-                                        </h6>
-                                    );
-                                })}
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        addComment(item._id, e.target[0].value);
-                                        e.target[0].value = "";
-                                    }}
-                                >
-                                    <input
-                                        type="text"
-                                        placeholder="Add a Comment.."
+            {data ? (
+                data.length ? (
+                    data.map((item) => {
+                        return (
+                            <div className="card home-card" key={item._id}>
+                                <h4 style={{ maxHeight: "70px" }}>
+                                    <img
+                                        src={item.author.photo}
+                                        className="home-profile-img"
+                                        alt=""
                                     />
-                                </form>
+                                    <Link
+                                        style={{
+                                            position: "relative",
+                                            top: "-25px",
+                                        }}
+                                        to={
+                                            item.author._id !== state._id
+                                                ? "/user/" + item.author._id
+                                                : "/profile"
+                                        }
+                                    >
+                                        {item.author.name}
+                                    </Link>
+                                    {item.author._id === state._id && (
+                                        <i
+                                            className="material-icons medium red-text"
+                                            onClick={() => {
+                                                deletePost(item._id);
+                                            }}
+                                            style={{
+                                                float: "right",
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            delete
+                                        </i>
+                                    )}
+                                </h4>
+                                <div className="card-image">
+                                    <img
+                                        src={item.photo}
+                                        alt=""
+                                        onDoubleClick={() => likePost(item._id)}
+                                    />
+                                </div>
+                                <div className="card-content">
+                                    {item.likes.includes(state._id) ? (
+                                        <i
+                                            className="material-icons medium"
+                                            onClick={() => {
+                                                unlikePost(item._id);
+                                            }}
+                                            style={{
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            thumb_down
+                                        </i>
+                                    ) : (
+                                        <i
+                                            className="material-icons medium"
+                                            onClick={() => {
+                                                likePost(item._id);
+                                            }}
+                                            style={{
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            thumb_up
+                                        </i>
+                                    )}
+                                    {item.likes.length > 1 ? (
+                                        <h6>{item.likes.length} likes</h6>
+                                    ) : (
+                                        <h6>{item.likes.length} like</h6>
+                                    )}
+                                    <h6>
+                                        <b>
+                                            <Link
+                                                to={`/user/${item.author._id}`}
+                                            >
+                                                {item.author.name}
+                                            </Link>
+                                        </b>{" "}
+                                        : {item.caption}
+                                    </h6>
+                                    {item.comments.map((item2) => {
+                                        return (
+                                            <h6 key={item2._id}>
+                                                <b>
+                                                    <Link
+                                                        to={`/user/${item2.author._id}`}
+                                                    >
+                                                        {item2.author.name}
+                                                    </Link>
+                                                </b>{" "}
+                                                : {item2.text}
+                                                {item2.author._id ===
+                                                    state._id && (
+                                                    <i
+                                                        className="material-icons"
+                                                        style={{
+                                                            float: "right",
+                                                            position:
+                                                                "relative",
+                                                            top: "-4px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => {
+                                                            deleteComment(
+                                                                item2._id,
+                                                                item._id
+                                                            );
+                                                        }}
+                                                    >
+                                                        delete
+                                                    </i>
+                                                )}
+                                            </h6>
+                                        );
+                                    })}
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            addComment(
+                                                item._id,
+                                                e.target[0].value
+                                            );
+                                            e.target[0].value = "";
+                                        }}
+                                    >
+                                        <input
+                                            type="text"
+                                            placeholder="Add a Comment.."
+                                        />
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })
+                        );
+                    })
+                ) : (
+                    <Row>
+                        <Col s={12}>
+                            <ProgressBar />
+                        </Col>
+                    </Row>
+                )
             ) : (
-                <Row>
-                    <Col s={12}>
-                        <ProgressBar />
-                    </Col>
-                </Row>
+                <h3 id="loading">No Posts...</h3>
             )}
         </div>
     );

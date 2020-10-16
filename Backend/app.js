@@ -1,12 +1,15 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
+const socket = require("socket.io");
+const app = express();
 const MONGOURI =
     "mongodb+srv://Yash:ui2Soj2wR3hJOOqe@cluster0.ijyx1.mongodb.net/test?retryWrites=true&w=majority";
 const PORT = 5000;
 
 require("./models/user");
 require("./models/post");
+require("./models/conversation");
+require("./models/message");
 
 mongoose.connect(MONGOURI, {
     useNewUrlParser: true,
@@ -24,6 +27,11 @@ app.use(require("./routes/auth"));
 app.use(require("./routes/post"));
 app.use(require("./routes/user"));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log("Server is running on", PORT);
+});
+
+const io = socket(server);
+io.on("connection", (socket) => {
+    console.log("Made Socket connection ", socket.id);
 });
