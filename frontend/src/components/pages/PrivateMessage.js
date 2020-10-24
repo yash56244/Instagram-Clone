@@ -6,6 +6,7 @@ import socketIOClient from "socket.io-client";
 const PrivateMessage = () => {
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
+    const [user, setUser] = useState([]);
     const [lastMessage, setLastMessage] = useState(null);
     const { receiverId } = useParams();
     // eslint-disable-next-line no-unused-vars
@@ -61,54 +62,66 @@ const PrivateMessage = () => {
                 console.log(err);
             });
     };
+    const fetchProfile = () => {
+        fetch(`/user/${receiverId}`, {
+            headers: {
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                setUser(res.user);
+            });
+    };
+    useEffect(fetchProfile, []);
     return (
         <div className="chat-container">
             <div className="chat-header">
-                <h4 style={{ maxHeight: "70px" }}>
-                    <img className="home-profile-img" alt="" />
+                <h4 style={{ maxHeight: "60px" }}>
+                    <img src={user.photo} className="home-profile-img" alt="" />
                     <Link
+                        to={"/user/" + user._id}
                         style={{
                             position: "relative",
                             top: "-25px",
                         }}
                     >
-                        {}
+                        {user.name}
                     </Link>
                 </h4>
             </div>
-            <div className="message-container">
+            <hr></hr>
+            <ol className="message-container">
                 {messages &&
                     messages.map((message) => {
                         return message.from._id === state._id ? (
-                            <div
-                                style={{
-                                    border: "0.1px solid rgba(128,128,128,0.4)",
-                                }}
-                                className="message message-right"
-                                key={message._id}
-                            >
-                                {message.body}
+                            <div style={{ clear: "both" }}>
+                                <div
+                                    className="message message-right"
+                                    key={message._id}
+                                >
+                                    {message.body}
+                                </div>
                             </div>
                         ) : (
-                            <div
-                                className="message message-left"
-                                style={{
-                                    background: "rgba(128,128,128,0.4)",
-                                }}
-                                key={message._id}
-                            >
-                                {message.body}
+                            <div style={{ clear: "both" }}>
+                                <div
+                                    className="message message-left"
+                                    key={message._id}
+                                >
+                                    {message.body}
+                                </div>
                             </div>
                         );
                     })}
                 <div ref={messagesEndRef} />
-            </div>
+            </ol>
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    placeholder="Type a Message.."
+                    placeholder="Message..."
                 />
             </form>
         </div>

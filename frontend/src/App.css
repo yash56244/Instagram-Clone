@@ -123,18 +123,25 @@ a {
 .message-container {
     max-height: 500px;
     overflow-y: scroll;
+    padding-left: 0px;
 }
 
 .message {
     font-size: large;
+    margin: 5px 5px;
     padding: 10px 20px;
     max-width: max-content;
-}
-
-.message-right {
-    border-radius: 0 10px 10px 10px;
+    box-shadow: -3px 4px 4px 0px rgba(0, 0, 0, 0.08);
 }
 
 .message-left {
+    border-radius: 0 10px 10px 10px;
+    border: 0.1px solid rgba(128, 128, 128, 0.4);
+    float: left;
+}
+
+.message-right {
     border-radius: 10px 0px 10px 10px;
+    background: rgba(128, 128, 128, 0.2);
+    float: right;
 }

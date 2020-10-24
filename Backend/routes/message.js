@@ -38,7 +38,6 @@ router.post("/inbox/:id", loginRequired, (req, res) => {
         {
             recipients: [req.user._id, req.params.id],
             lastMessage: req.body.message,
-            date: Date.now(),
         },
         {
             upsert: true,
