@@ -16,9 +16,13 @@ module.exports = (req, res, next) => {
             return res.status(401).json({ error: err });
         }
         const { _id } = payload;
-        User.findById(_id).then((user) => {
-            req.user = user;
-            next();
-        });
+        User.findById(_id)
+            .then((user) => {
+                req.user = user;
+                next();
+            })
+            .catch((err) => {
+                console.log("User not found");
+            });
     });
 };

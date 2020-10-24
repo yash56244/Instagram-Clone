@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
 import M from "materialize-css";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Row, Col, ProgressBar } from "react-materialize";
 
 const Post = () => {
-    const history = useHistory();
     const [data, setData] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);

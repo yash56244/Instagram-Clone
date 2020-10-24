@@ -106,23 +106,6 @@ const Home = () => {
                 console.log(err);
             });
     };
-    const deletePost = (id) => {
-        fetch(`/post/${id}/delete`, {
-            method: "delete",
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const newData = data.filter((item) => {
-                    return item._id !== result._id;
-                });
-                setData(newData);
-                M.toast({ html: "Post deleted", classes: "green" });
-            });
-    };
     const deleteComment = (id, postId) => {
         fetch(`/comment/${id}/delete`, {
             method: "delete",
@@ -172,20 +155,6 @@ const Home = () => {
                                     >
                                         {item.author.name}
                                     </Link>
-                                    {item.author._id === state._id && (
-                                        <i
-                                            className="material-icons medium red-text"
-                                            onClick={() => {
-                                                deletePost(item._id);
-                                            }}
-                                            style={{
-                                                float: "right",
-                                                cursor: "pointer",
-                                            }}
-                                        >
-                                            delete
-                                        </i>
-                                    )}
                                 </h4>
                                 <div className="card-image">
                                     <img

@@ -113,3 +113,28 @@ a {
         #fd1d1d
     );
 }
+
+.chat-container {
+    max-width: 800px;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+.message-container {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.message {
+    font-size: large;
+    padding: 10px 20px;
+    max-width: max-content;
+}
+
+.message-right {
+    border-radius: 0 10px 10px 10px;
+}
+
+.message-left {
+    border-radius: 10px 0px 10px 10px;
+}

@@ -55,7 +55,7 @@ const Router = () => {
             <Route exact path="/posts/me">
                 <Posts />
             </Route>
-            <Route exact path="/inbox/:id">
+            <Route exact path="/inbox/:receiverId">
                 <PrivateMessage />
             </Route>
         </Switch>
