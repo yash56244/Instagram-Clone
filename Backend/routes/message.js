@@ -23,27 +23,15 @@ router.get("/inbox/:id", loginRequired, (req, res) => {
         });
 });
 
-router.post("/inbox/:id", loginRequired, (req, res) => {
+router.post("/inbox/:id", loginRequired, async (req, res) => {
     const from = req.user._id;
     const to = req.params.id;
-    Conversation.findOneAndUpdate(
+    await Conversation.findOneAndUpdate(
         {
-            recipients: {
-                $all: [
-                    { $elemMatch: { $eq: from } },
-                    { $elemMatch: { $eq: to } },
-                ],
-            },
+            recipients: [from, to],
         },
-        {
-            recipients: [req.user._id, req.params.id],
-            lastMessage: req.body.message,
-        },
-        {
-            upsert: true,
-            new: true,
-            setDefaultsOnInsert: true,
-        },
+        { recipients: [from, to], lastMessage: req.body.message },
+        { new: true, upsert: true },
         (err, conversation) => {
             if (err) {
                 return res.status(422).json({ error: err });

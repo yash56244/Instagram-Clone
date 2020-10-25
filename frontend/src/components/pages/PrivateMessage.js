@@ -22,7 +22,6 @@ const PrivateMessage = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setMessages(data);
             })
             .catch((err) => {
@@ -55,7 +54,6 @@ const PrivateMessage = () => {
         })
             .then((res) => res.text())
             .then((data) => {
-                console.log(data);
                 setNewMessage("");
             })
             .catch((err) => {
@@ -95,20 +93,14 @@ const PrivateMessage = () => {
                 {messages &&
                     messages.map((message) => {
                         return message.from._id === state._id ? (
-                            <div style={{ clear: "both" }}>
-                                <div
-                                    className="message message-right"
-                                    key={message._id}
-                                >
+                            <div style={{ clear: "both" }} key={message._id}>
+                                <div className="message message-right">
                                     {message.body}
                                 </div>
                             </div>
                         ) : (
-                            <div style={{ clear: "both" }}>
-                                <div
-                                    className="message message-left"
-                                    key={message._id}
-                                >
+                            <div style={{ clear: "both" }} key={message._id}>
+                                <div className="message message-left">
                                     {message.body}
                                 </div>
                             </div>

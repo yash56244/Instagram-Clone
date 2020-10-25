@@ -15,6 +15,7 @@ const Profile = () => {
     const [image, setImage] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState([]);
     const fetchMyPosts = () => {
         fetch("/posts/me", {
             headers: {
@@ -94,6 +95,21 @@ const Profile = () => {
                 console.log(err);
             });
     };
+
+    const fetchProfile = () => {
+        if (state) {
+            fetch(`/user/${state._id}`, {
+                headers: {
+                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    setUser(res.user);
+                });
+        }
+    };
+    useEffect(fetchProfile, [state]);
     return (
         <React.Fragment>
             <Row>
@@ -230,10 +246,12 @@ const Profile = () => {
                                 {photos.length > 1 ? " posts" : " post"}
                             </h6>
                             <h6>
-                                {state ? state.followers.length : "0"} followers
+                                {user.followers ? user.followers.length : "0"}{" "}
+                                followers
                             </h6>
                             <h6>
-                                {state ? state.following.length : "0"} following
+                                {user.following ? user.following.length : "0"}{" "}
+                                following
                             </h6>
                         </div>
                     </div>

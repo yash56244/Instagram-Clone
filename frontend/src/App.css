@@ -121,7 +121,7 @@ a {
 }
 
 .message-container {
-    max-height: 500px;
+    height: 500px;
     overflow-y: scroll;
     padding-left: 0px;
 }

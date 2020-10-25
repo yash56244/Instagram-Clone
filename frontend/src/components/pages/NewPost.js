@@ -31,7 +31,7 @@ const NewPost = () => {
                             html: "Posted Successfully",
                             classes: "green",
                         });
-                        history.push("/");
+                        history.push("/posts/me");
                     }
                 })
                 .catch((error) => {

@@ -1,13 +1,29 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext } from "../App";
+import M from "materialize-css";
 
 const Navbar = () => {
     const history = useHistory();
     const { state, dispatch } = useContext(UserContext);
+    const [query, setQuery] = useState("");
+    const [userList, setUserList] = useState([]);
+    const searchUser = useRef(null);
+    useEffect(() => {
+        M.Modal.init(searchUser.current);
+    }, []);
     const renderList = () => {
         if (state) {
             return [
+                <li key="search" style={{ color: "black", cursor: "pointer" }}>
+                    {" "}
+                    <i
+                        data-target="modal1"
+                        className="material-icons modal-trigger"
+                    >
+                        search
+                    </i>
+                </li>,
                 <li key="profile">
                     <Link to="/profile">Profile</Link>
                 </li>,
@@ -39,6 +55,21 @@ const Navbar = () => {
             ];
         }
     };
+    const searchQuery = (q) => {
+        setQuery(q);
+        fetch("/search", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+            },
+            body: JSON.stringify({ query: q }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setUserList(data.users);
+            });
+    };
     return (
         <nav>
             <div className="nav-wrapper white">
@@ -48,6 +79,88 @@ const Navbar = () => {
                 <ul id="nav-mobile" className="right">
                     {renderList()}
                 </ul>
+            </div>
+            <div
+                id="modal1"
+                className="modal"
+                ref={searchUser}
+                style={{ color: "black" }}
+            >
+                <div className="modal-content">
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => searchQuery(e.target.value)}
+                        placeholder="Enter Username"
+                    />
+                    <ul className="collection">
+                        {userList.length > 0 &&
+                            userList.map((user) => {
+                                if (user._id === state._id) {
+                                    return null;
+                                }
+                                return (
+                                    <Link
+                                        // to={"/user/" + user._id}
+                                        onClick={() => {
+                                            setQuery("");
+                                            setUserList([]);
+                                            M.Modal.getInstance(
+                                                searchUser.current
+                                            ).close();
+                                            window.location.href =
+                                                "/user/" + user._id;
+                                        }}
+                                    >
+                                        <li
+                                            className="collection-item avatar"
+                                            style={{
+                                                width: "100%",
+                                            }}
+                                            key={user._id}
+                                        >
+                                            <img
+                                                src={user.photo}
+                                                alt=""
+                                                className="circle"
+                                            />
+                                            <span className="title">
+                                                {user.name}
+                                            </span>
+                                            <p>
+                                                {user.email}
+                                                <br />
+                                                {user.following.indexOf(
+                                                    state._id
+                                                ) !== -1
+                                                    ? "Follows You"
+                                                    : ""}
+                                            </p>
+                                            <p className="secondary-content">
+                                                {user.followers.indexOf(
+                                                    state._id
+                                                ) !== -1
+                                                    ? "Following"
+                                                    : ""}
+                                            </p>
+                                        </li>
+                                    </Link>
+                                );
+                            })}
+                    </ul>
+                </div>
+                <div className="modal-footer">
+                    <button
+                        href="#!"
+                        className="modal-close waves-effect waves-green btn-flat"
+                        onClick={() => {
+                            setQuery("");
+                            setUserList([]);
+                        }}
+                    >
+                        Close
+                    </button>
+                </div>
             </div>
         </nav>
     );

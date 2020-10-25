@@ -77,4 +77,16 @@ router.put("/unfollow", loginRequired, (req, res) => {
     );
 });
 
+router.post("/search", loginRequired, (req, res) => {
+    const pattern = new RegExp("^" + req.body.query, "i");
+    User.find({ name: { $regex: pattern } })
+        .select("-password")
+        .then((users) => {
+            res.json({ users });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
 module.exports = router;

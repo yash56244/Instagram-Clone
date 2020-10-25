@@ -24,7 +24,6 @@ const Register = () => {
                 });
                 return;
             }
-            setLoading(true);
             fetch("/register", {
                 method: "post",
                 headers: {
@@ -58,6 +57,7 @@ const Register = () => {
         if (!image) {
             return M.toast({ html: "Please add all fields", classes: "red" });
         }
+        setLoading(true);
         const data = new FormData();
         data.append("file", image);
         data.append("upload_preset", "insta-clone");

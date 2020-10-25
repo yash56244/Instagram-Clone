@@ -12,6 +12,7 @@ const User = () => {
     const fetchProfile = () => {
         fetch(`/user/${id}`, {
             headers: {
+                "Content-Type": "application/json",
                 authorization: "Bearer " + localStorage.getItem("jwt"),
             },
         })
@@ -165,6 +166,7 @@ const User = () => {
                                         className="profile-gallery-img"
                                         src={item.photo}
                                         alt=""
+                                        key={item._id}
                                     ></img>
                                 );
                             })
