@@ -12,24 +12,31 @@ const PrivateMessage = () => {
     // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
     const messagesEndRef = useRef(null);
+    const recipients = [state ? state._id : "", receiverId];
+    recipients.sort();
+    const conversationId = recipients[0] + recipients[1];
     const fetchMessages = () => {
-        fetch(`/inbox/${receiverId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setMessages(data);
+        if (state) {
+            fetch(`/conversation/${conversationId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                },
             })
-            .catch((err) => {
-                console.log(err);
-            });
-        scrollToBottom();
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data) {
+                        setMessages(data[0].messages);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            scrollToBottom();
+        }
     };
-    useEffect(fetchMessages, [lastMessage]);
+    useEffect(fetchMessages, [lastMessage, state]);
     useEffect(() => {
         const socket = socketIOClient("http://localhost:3000");
         socket.on("messages", (data) => {
@@ -42,7 +49,7 @@ const PrivateMessage = () => {
     useEffect(scrollToBottom, [messages]);
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch(`/inbox/${receiverId}`, {
+        fetch("/inbox", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,9 +57,11 @@ const PrivateMessage = () => {
             },
             body: JSON.stringify({
                 message: newMessage,
+                conversationId: conversationId,
+                recipients,
             }),
         })
-            .then((res) => res.text())
+            .then((res) => res.json())
             .then((data) => {
                 setNewMessage("");
             })
@@ -92,7 +101,7 @@ const PrivateMessage = () => {
             <ol className="message-container">
                 {messages &&
                     messages.map((message) => {
-                        return message.from._id === state._id ? (
+                        return message.from === state._id ? (
                             <div style={{ clear: "both" }} key={message._id}>
                                 <div className="message message-right">
                                     {message.body}

@@ -3,15 +3,7 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const messageSchema = new mongoose.Schema(
     {
-        conversation: {
-            type: ObjectId,
-            ref: "Conversation",
-        },
         from: {
-            type: ObjectId,
-            ref: "User",
-        },
-        to: {
             type: ObjectId,
             ref: "User",
         },

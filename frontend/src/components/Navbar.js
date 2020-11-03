@@ -10,7 +10,13 @@ const Navbar = () => {
     const [userList, setUserList] = useState([]);
     const searchUser = useRef(null);
     useEffect(() => {
-        M.Modal.init(searchUser.current);
+        const options = {
+            onCloseEnd: () => {
+                setQuery("");
+                setUserList([]);
+            },
+        };
+        M.Modal.init(searchUser.current, options);
     }, []);
     const renderList = () => {
         if (state) {
@@ -148,18 +154,6 @@ const Navbar = () => {
                                 );
                             })}
                     </ul>
-                </div>
-                <div className="modal-footer">
-                    <button
-                        href="#!"
-                        className="modal-close waves-effect waves-green btn-flat"
-                        onClick={() => {
-                            setQuery("");
-                            setUserList([]);
-                        }}
-                    >
-                        Close
-                    </button>
                 </div>
             </div>
         </nav>

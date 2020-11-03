@@ -3,10 +3,9 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const conversationSchema = new mongoose.Schema(
     {
+        conversationId: { type: String },
         recipients: [{ type: ObjectId, ref: "User" }],
-        lastMessage: {
-            type: String,
-        },
+        messages: [{ type: ObjectId, ref: "Message" }],
     },
     { timestamps: true }
 );

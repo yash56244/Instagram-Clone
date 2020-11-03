@@ -5,7 +5,7 @@ const socket = require("socket.io");
 const bodyParser = require("body-parser");
 const app = express();
 const MONGOURI =
-    "mongodb+srv://Yash:ui2Soj2wR3hJOOqe@cluster0.ijyx1.mongodb.net/test?retryWrites=true&w=majority";
+    "mongodb+srv://Yash:ui2Soj2wR3hJOOqe@cluster0.ijyx1.mongodb.net/instaClone?retryWrites=true&w=majority";
 const PORT = 5000;
 
 const server = app.listen(PORT, () => {
