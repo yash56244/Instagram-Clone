@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const socket = require("socket.io");
-// const cors = require("cors");
-const bodyParser = require("body-parser");
 const app = express();
 const MONGOURI =
     "mongodb+srv://Yash:ui2Soj2wR3hJOOqe@cluster0.ijyx1.mongodb.net/instaClone?retryWrites=true&w=majority";
@@ -12,15 +10,14 @@ const server = app.listen(PORT, () => {
     console.log("Server is running on", PORT);
 });
 
-app.use(
-    bodyParser.urlencoded({
-        extended: false,
-    })
-);
-app.use(bodyParser.json());
-// app.use(cors());
-
 const io = socket(server);
+io.on("connection", (socket) => {
+    const customId = socket.handshake.query.id;
+    socket.join(customId);
+    socket.on("send-message", ({ msg, id }) => {
+        socket.emit("receive-message", msg);
+    });
+});
 
 app.use((req, res, next) => {
     req.io = io;
@@ -30,7 +27,6 @@ app.use((req, res, next) => {
 require("./models/user");
 require("./models/post");
 require("./models/conversation");
-require("./models/message");
 
 mongoose.connect(MONGOURI, {
     useNewUrlParser: true,

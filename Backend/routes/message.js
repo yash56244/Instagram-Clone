@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Conversation = mongoose.model("Conversation");
-const Message = mongoose.model("Message");
 const loginRequired = require("../middleware/loginRequired");
 
 router.get("/conversation/:id", loginRequired, (req, res) => {
@@ -16,18 +15,16 @@ router.get("/conversation/:id", loginRequired, (req, res) => {
         });
 });
 
-router.post("/inbox", loginRequired, (req, res) => {
-    const message = new Message({ from: req.user, body: req.body.message });
-    Conversation.findOneAndUpdate(
+router.post("/inbox", loginRequired, async (req, res) => {
+    const message = { from: req.user, body: req.body.message };
+    await Conversation.findOneAndUpdate(
         { conversationId: req.body.conversationId },
         { $push: { messages: message }, recipients: req.body.recipients },
         { new: true, upsert: true, setDefaultsOnInsert: true }
     ).exec((err, conversation) => {
         if (err) {
-            console.log(err);
+            return res.status(422).json({ error: err });
         }
-        message.save();
-        req.io.sockets.emit("messages", req.body.message);
         res.json(conversation);
     });
 });

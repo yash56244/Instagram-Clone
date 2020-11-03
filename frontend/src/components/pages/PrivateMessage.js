@@ -15,6 +15,11 @@ const PrivateMessage = () => {
     const recipients = [state ? state._id : "", receiverId];
     recipients.sort();
     const conversationId = recipients[0] + recipients[1];
+    const socket = state
+        ? socketIOClient("http://localhost:3000", {
+              query: { id: state._id },
+          })
+        : "";
     const fetchMessages = () => {
         if (state) {
             fetch(`/conversation/${conversationId}`, {
@@ -38,10 +43,11 @@ const PrivateMessage = () => {
     };
     useEffect(fetchMessages, [lastMessage, state]);
     useEffect(() => {
-        const socket = socketIOClient("http://localhost:3000");
-        socket.on("messages", (data) => {
-            setLastMessage(data);
-        });
+        if (state) {
+            socket.on("receive-message", (data) => {
+                setLastMessage(data);
+            });
+        }
     });
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -49,6 +55,7 @@ const PrivateMessage = () => {
     useEffect(scrollToBottom, [messages]);
     const handleSubmit = (e) => {
         e.preventDefault();
+        socket.emit("send-message", { msg: newMessage, id: user._id });
         fetch("/inbox", {
             method: "POST",
             headers: {
