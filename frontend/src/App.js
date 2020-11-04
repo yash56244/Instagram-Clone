@@ -20,7 +20,7 @@ const Router = () => {
     // eslint-disable-next-line no-unused-vars
     const { state, dispatch } = useContext(UserContext);
     const userEffect = () => {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const user = JSON.parse(sessionStorage.getItem("user"));
         if (user) {
             dispatch({ type: "USER", payload: user });
         } else {

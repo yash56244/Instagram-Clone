@@ -13,7 +13,7 @@ const User = () => {
         fetch(`/user/${id}`, {
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
         })
             .then((res) => res.json())
@@ -28,7 +28,7 @@ const User = () => {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({ followId: id }),
         })
@@ -41,7 +41,7 @@ const User = () => {
                         followers: data.followers,
                     },
                 });
-                localStorage.setItem("user", JSON.stringify(data));
+                sessionStorage.setItem("user", JSON.stringify(data));
                 setUserProfile((prevState) => {
                     return {
                         ...prevState,
@@ -58,7 +58,7 @@ const User = () => {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({ unfollowId: id }),
         })
@@ -71,7 +71,7 @@ const User = () => {
                         followers: data.followers,
                     },
                 });
-                localStorage.setItem("user", JSON.stringify(data));
+                sessionStorage.setItem("user", JSON.stringify(data));
                 setUserProfile((prevState) => {
                     const newFollowData = prevState.user.followers.filter(
                         (item) => item !== data._id

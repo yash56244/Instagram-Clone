@@ -15,7 +15,7 @@ const NewPost = () => {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                    authorization: "Bearer " + sessionStorage.getItem("jwt"),
                 },
                 body: JSON.stringify({
                     caption,

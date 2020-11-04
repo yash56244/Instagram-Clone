@@ -19,7 +19,7 @@ const Profile = () => {
     const fetchMyPosts = () => {
         fetch("/posts/me", {
             headers: {
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
         })
             .then((res) => res.json())
@@ -48,7 +48,7 @@ const Profile = () => {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                    authorization: "Bearer " + sessionStorage.getItem("jwt"),
                 },
                 body: JSON.stringify({
                     name: name ? name : state.name,
@@ -60,7 +60,7 @@ const Profile = () => {
                 .then((res) => res.json())
                 .then((data) => {
                     dispatch({ type: "USER", payload: data.user });
-                    localStorage.setItem("user", JSON.stringify(data.user));
+                    sessionStorage.setItem("user", JSON.stringify(data.user));
                     if (data.error) {
                         M.toast({ html: data.error, classes: "red" });
                     } else {
@@ -100,7 +100,7 @@ const Profile = () => {
         if (state) {
             fetch(`/user/${state._id}`, {
                 headers: {
-                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                    authorization: "Bearer " + sessionStorage.getItem("jwt"),
                 },
             })
                 .then((res) => res.json())

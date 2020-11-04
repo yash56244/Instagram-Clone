@@ -40,7 +40,7 @@ const Navbar = () => {
                     <button
                         className="btn waves-effect waves-light red"
                         onClick={() => {
-                            localStorage.clear();
+                            sessionStorage.clear();
                             dispatch({ type: "CLEAR" });
                             history.push("/login");
                         }}
@@ -67,7 +67,7 @@ const Navbar = () => {
             method: "post",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({ query: q }),
         })

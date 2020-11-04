@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../../App";
 import socketIOClient from "socket.io-client";
+import aes256 from "aes256";
 
 const PrivateMessage = () => {
     const [newMessage, setNewMessage] = useState("");
@@ -15,24 +16,23 @@ const PrivateMessage = () => {
     const recipients = [state ? state._id : "", receiverId];
     recipients.sort();
     const conversationId = recipients[0] + recipients[1];
-    // const socket = state
-    //     ? socketIOClient("http://localhost:3000", {
-    //           query: { id: state._id },
-    //       })
-    //     : socketIOClient("http://localhost:3000");
     const fetchMessages = () => {
         if (state) {
             fetch(`/conversation/${conversationId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    authorization: "Bearer " + localStorage.getItem("jwt"),
+                    authorization: "Bearer " + sessionStorage.getItem("jwt"),
                 },
             })
                 .then((res) => res.json())
-                .then((data) => {
-                    if (data) {
-                        setMessages(data[0].messages);
+                .then((res) => {
+                    if (res) {
+                        const data = res[0].messages;
+                        data.forEach((message) => {
+                            message.body = aes256.decrypt(conversationId, message.body);
+                        });
+                        setMessages(data);
                     }
                 })
                 .catch((err) => {
@@ -45,7 +45,8 @@ const PrivateMessage = () => {
     useEffect(() => {
         const socket = socketIOClient("http://localhost:3000");
         socket.on("message", (data) => {
-            setLastMessage(data);
+            const decryptedMessage = aes256.decrypt(conversationId, data);
+            setLastMessage(decryptedMessage);
         });
     });
     const scrollToBottom = () => {
@@ -58,10 +59,10 @@ const PrivateMessage = () => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
-                message: newMessage,
+                message: aes256.encrypt(conversationId, newMessage),
                 conversationId: conversationId,
                 recipients,
             }),
@@ -77,7 +78,7 @@ const PrivateMessage = () => {
     const fetchProfile = () => {
         fetch(`/user/${receiverId}`, {
             headers: {
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
         })
             .then((res) => res.json())

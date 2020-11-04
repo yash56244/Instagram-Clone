@@ -12,7 +12,7 @@ const Post = () => {
         fetch("/posts/me", {
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
         })
             .then((res) => res.json())
@@ -29,7 +29,7 @@ const Post = () => {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
                 postId: id,
@@ -55,7 +55,7 @@ const Post = () => {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
                 postId: id,
@@ -84,7 +84,7 @@ const Post = () => {
             method: "put",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
                 postId: id,
@@ -111,7 +111,7 @@ const Post = () => {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
         })
             .then((res) => res.json())
@@ -128,7 +128,7 @@ const Post = () => {
             method: "delete",
             headers: {
                 "Content-Type": "application/json",
-                authorization: "Bearer " + localStorage.getItem("jwt"),
+                authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
                 postId,
