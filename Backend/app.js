@@ -11,14 +11,6 @@ const server = app.listen(PORT, () => {
 });
 
 const io = socket(server);
-io.on("connection", (socket) => {
-    const customId = socket.handshake.query.id;
-    socket.join(customId);
-    socket.on("send-message", ({ msg, id }) => {
-        socket.emit("receive-message", msg);
-    });
-});
-
 app.use((req, res, next) => {
     req.io = io;
     next();

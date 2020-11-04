@@ -25,6 +25,7 @@ router.post("/inbox", loginRequired, async (req, res) => {
         if (err) {
             return res.status(422).json({ error: err });
         }
+        req.io.sockets.emit("message", req.body.message);
         res.json(conversation);
     });
 });
