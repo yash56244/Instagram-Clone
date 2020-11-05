@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../../App";
 import socketIOClient from "socket.io-client";
 import aes256 from "aes256";
+import sha256 from "sha256";
 
 const PrivateMessage = () => {
     const [newMessage, setNewMessage] = useState("");
@@ -14,8 +15,15 @@ const PrivateMessage = () => {
     const { state, dispatch } = useContext(UserContext);
     const messagesEndRef = useRef(null);
     const recipients = [state ? state._id : "", receiverId];
-    recipients.sort();
-    const conversationId = recipients[0] + recipients[1];
+    const getConversationId = (recipients) => {
+        recipients.sort();
+        let output = "";
+        for (let i = 0; i < recipients.length; i++) {
+            output += recipients[0];
+        }
+        return sha256(output);
+    };
+    const conversationId = getConversationId(recipients);
     const fetchMessages = () => {
         if (state) {
             fetch(`/conversation/${conversationId}`, {
@@ -30,7 +38,10 @@ const PrivateMessage = () => {
                     if (res) {
                         const data = res[0].messages;
                         data.forEach((message) => {
-                            message.body = aes256.decrypt(conversationId, message.body);
+                            message.body = aes256.decrypt(
+                                sha256(conversationId),
+                                message.body
+                            );
                         });
                         setMessages(data);
                     }
@@ -45,7 +56,10 @@ const PrivateMessage = () => {
     useEffect(() => {
         const socket = socketIOClient("http://localhost:3000");
         socket.on("message", (data) => {
-            const decryptedMessage = aes256.decrypt(conversationId, data);
+            const decryptedMessage = aes256.decrypt(
+                sha256(conversationId),
+                data
+            );
             setLastMessage(decryptedMessage);
         });
     });
@@ -62,7 +76,7 @@ const PrivateMessage = () => {
                 authorization: "Bearer " + sessionStorage.getItem("jwt"),
             },
             body: JSON.stringify({
-                message: aes256.encrypt(conversationId, newMessage),
+                message: aes256.encrypt(sha256(conversationId), newMessage),
                 conversationId: conversationId,
                 recipients,
             }),
